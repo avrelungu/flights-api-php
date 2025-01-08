@@ -24,3 +24,8 @@ $app->get('/healthcheck', function (Request $request, Response $response) {
 });
 
 $app->get('/flights', [FlightsController::class, 'index']);
+
+$app->get(
+    '/flights/{number:[A-Za-z]{2}[0-9]{1,4}-[0-9]{8}}',
+    [FlightsController::class, 'show']
+);

@@ -23,4 +23,17 @@ readonly class FlightsController extends ApiController
 
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    public function show(Request $request, Response $response, string $number): Response
+    {
+        $flight = $this->entityManager->getRepository(Flight::class)->findOneBy([
+            'number' => $number
+        ]);
+
+        $jsonFlight = $this->serializer->serialize(['flight' => $flight], 'json');
+
+        $response->getBody()->write($jsonFlight);
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }
