@@ -28,6 +28,6 @@ services:
             MARIADB_USER: user
             MARIADB_PASSWORD: secret
         ports:
-            - "3306:3306"
+            - "3309:3306"
 volumes:
     flightsdata:
