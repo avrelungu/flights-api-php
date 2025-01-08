@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Controller\FlightsController;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Handlers\Strategies\RequestResponseArgs;
@@ -21,3 +22,5 @@ $app->get('/healthcheck', function (Request $request, Response $response) {
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });
+
+$app->get('/flights', [FlightsController::class, 'index']);
