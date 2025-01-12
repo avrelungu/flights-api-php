@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Flight;
-use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 readonly class FlightsController extends ApiController
@@ -16,12 +16,15 @@ readonly class FlightsController extends ApiController
         $flights = $this->entityManager->getRepository(Flight::class)->findAll();
 
         // Serialize
-        $json = $this->serializer->serialize(['flights' => $flights], 'json');
+        $responseContent = $this->serializer->serialize(
+            ['flights' => $flights], 
+            $request->getAttribute('Content-Type')->format()
+        );
 
         // Return the response containing the flights
-        $response->getBody()->write($json);
+        $response->getBody()->write($responseContent);
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
 
     public function show(Request $request, Response $response, string $number): Response
@@ -30,10 +33,13 @@ readonly class FlightsController extends ApiController
             'number' => $number
         ]);
 
-        $jsonFlight = $this->serializer->serialize(['flight' => $flight], 'json');
+        $jsonFlight = $this->serializer->serialize(
+            ['flight' => $flight],
+            $request->getAttribute('Content-Type')->format()
+        );
 
         $response->getBody()->write($jsonFlight);
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
 }
