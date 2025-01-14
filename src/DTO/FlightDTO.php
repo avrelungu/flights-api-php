@@ -21,7 +21,7 @@ class FlightDTO
     /**
      * Get the value of number
      */ 
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
@@ -31,7 +31,7 @@ class FlightDTO
      *
      * @return  self
      */ 
-    public function setNumber($number)
+    public function setNumber(string $number): self
     {
         $this->number = $number;
 
@@ -41,7 +41,7 @@ class FlightDTO
     /**
      * Get the value of origin
      */ 
-    public function getOrigin()
+    public function getOrigin(): string
     {
         return $this->origin;
     }
@@ -51,7 +51,7 @@ class FlightDTO
      *
      * @return  self
      */ 
-    public function setOrigin($origin)
+    public function setOrigin(string $origin): self
     {
         $this->origin = $origin;
 
@@ -61,7 +61,7 @@ class FlightDTO
     /**
      * Get the value of destination
      */ 
-    public function getDestination()
+    public function getDestination(): string
     {
         return $this->destination;
     }
@@ -71,7 +71,7 @@ class FlightDTO
      *
      * @return  self
      */ 
-    public function setDestination($destination)
+    public function setDestination(string $destination): self
     {
         $this->destination = $destination;
 
@@ -81,7 +81,7 @@ class FlightDTO
     /**
      * Get the value of arrivalTime
      */ 
-    public function getArrivalTime()
+    public function getArrivalTime(): DateTimeImmutable
     {
         return $this->arrivalTime;
     }
@@ -91,7 +91,7 @@ class FlightDTO
      *
      * @return  self
      */ 
-    public function setArrivalTime(string $arrivalTime)
+    public function setArrivalTime(string $arrivalTime): self
     {
         $this->arrivalTime = new DateTimeImmutable($arrivalTime);
 
@@ -101,7 +101,7 @@ class FlightDTO
     /**
      * Get the value of departureTime
      */ 
-    public function getDepartureTime()
+    public function getDepartureTime(): DateTimeImmutable
     {
         return $this->departureTime;
     }
@@ -111,7 +111,7 @@ class FlightDTO
      *
      * @return  self
      */ 
-    public function setDepartureTime(string $departureTime)
+    public function setDepartureTime(string $departureTime): self
     {
         $this->departureTime = new DateTimeImmutable($departureTime);
 
