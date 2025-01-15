@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Error;
 
+use App\Http\Error\Exception\ExtensibleExceptionInterface;
+use App\Http\Error\Exception\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpException;
@@ -28,7 +30,6 @@ class HttpErrorHandler extends ErrorHandler
     
     protected function respond(): ResponseInterface
     {
-        dd($this->exception->getMessage());
         $exception = $this->exception;
         $statusCode = 500;
         $problem = self::SERVER_ERROR;
@@ -37,27 +38,15 @@ class HttpErrorHandler extends ErrorHandler
 
         if ($exception instanceof HttpException) {
             $statusCode = $exception->getCode();
-            $description = $exception->getMessage();
+            $description = $exception->getDescription();
             $title = $exception->getTitle();
 
-            if ($exception instanceof HttpNotFoundException) {
-                $problem = ErrorType::NOT_FOUND;
-            } elseif ($exception instanceof HttpMethodNotAllowedException) {
-                $problem = ErrorType::METHOD_NOT_ALLOWED;
-            } elseif ($exception instanceof HttpUnauthorizedException) {
-                $problem = ErrorType::UNAUTHORIZED;
-            } elseif ($exception instanceof HttpForbiddenException) {
-                $problem = ErrorType::UNAUTHORIZED;
-            } elseif ($exception instanceof HttpBadRequestException) {
-                $problem = ErrorType::BAD_REQUEST;
-            } elseif ($exception instanceof HttpNotImplementedException) {
-                $problem = ErrorType::NOT_IMPLEMENTED;
-            }
+            $problem = ErrorType::tryFrom($exception->getCode()) ?? ErrorType::BAD_REQUEST;
         }
 
         if (
             !($exception instanceof HttpException)
-            && ($exception instanceof Exception || $exception instanceof Throwable)
+            && ($exception instanceof Throwable)
             && $this->displayErrorDetails
         ) {
             $description = $exception->getMessage();
@@ -67,19 +56,12 @@ class HttpErrorHandler extends ErrorHandler
             'type' => $problem->type(),
             'title' => $title,
             'detail' => $description,
-            'instance' => $this->request->getUri()->getPath(),
-            # extensions (examples) - Use custom exceptions for these and array merge the extensions
-            'errors' => [
-                [
-                    "detail" => "must be a positive integer",
-                    "pointer" => "#/age"
-                ],
-                [
-                    "detail" => "must be a positive integer",
-                    "pointer" => "#/age"
-                ],
-            ]
+            'instance' => $this->request->getUri()->getPath(),            
         ];
+
+        if ($exception instanceof ExtensibleExceptionInterface) {
+            $error += $exception->getExtensions();
+        }
         
         $payload = json_encode($error, JSON_PRETTY_PRINT);
         
