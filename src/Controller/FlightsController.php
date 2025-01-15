@@ -56,6 +56,8 @@ readonly class FlightsController extends ApiController
             $request->getAttribute('Content-Type')->format()
         );
 
+        $this->validator->validate($flight, $request);
+
         $this->entityManager->persist($flight);
         
         $this->entityManager->flush();
