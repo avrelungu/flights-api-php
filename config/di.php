@@ -14,7 +14,6 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\ValidatorBuilder;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -24,6 +23,11 @@ $container->delegate(new ReflectionContainer(true));
 # Settings
 $settings = require_once __DIR__ . '/settings.php';
 $container->add('settings', new ArrayArgument($settings));
+
+# Maintenance Mode
+$container->add('maintenance_mode', function() use ($settings) {
+    return $settings['app']['maintenance_mode'] === 'true';
+});
 
 # Services
 $container->addShared(EntityManagerInterface::class, function() use ($settings) : EntityManagerInterface {
