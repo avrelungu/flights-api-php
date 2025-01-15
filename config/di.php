@@ -8,6 +8,10 @@ use Doctrine\ORM\ORMSetup;
 use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\ValidatorBuilder;
@@ -66,6 +70,18 @@ $container->add(ValidatorInterface::class, function() {
     return Validation::createValidatorBuilder()
         ->enableAttributeMapping()
         ->getValidator();
+});
+
+$container->add(LoggerInterface::class, function() use ($settings) {
+    $logger = new Logger($settings['log']['name']);
+    $streamHandler = new StreamHandler(
+        $settings['log']['file'],
+        Level::fromName($settings['log']['level'])
+    );
+
+    $logger->pushHandler($streamHandler);
+
+    return $logger;
 });
 
 return $container;
