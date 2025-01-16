@@ -20,8 +20,7 @@ readonly class FlightsController extends ApiController
 
         // Serialize
         $responseContent = $this->serializer->serialize(
-            ['flights' => $flights], 
-            $request->getAttribute('Content-Type')->format()
+            ['flights' => $flights]
         );
 
         // Return the response containing the flights
@@ -38,7 +37,6 @@ readonly class FlightsController extends ApiController
 
         $jsonFlight = $this->serializer->serialize(
             ['flight' => $flight],
-            $request->getAttribute('Content-Type')->format()
         );
 
         $response->getBody()->write($jsonFlight);
@@ -52,8 +50,7 @@ readonly class FlightsController extends ApiController
 
         $flight = $this->serializer->deserialize(
             $flightJson, 
-            Flight::class, 
-            $request->getAttribute('Content-Type')->format()
+            Flight::class
         );
 
         $this->validator->validate($flight, $request, [Flight::CREATE_GROUP]);
@@ -99,10 +96,9 @@ readonly class FlightsController extends ApiController
         $flightJson = $request->getBody()->getContents();
 
         $flight = $this->serializer->deserialize(
-            $flightJson,
-            Flight::class,
-            $request->getAttribute('Content-Type')->format(),
-            [
+            data: $flightJson,
+            type: Flight::class,
+            context: [
                 AbstractNormalizer::OBJECT_TO_POPULATE => $flight,
                 AbstractNormalizer::IGNORED_ATTRIBUTES => ['number']
             ]
@@ -115,7 +111,6 @@ readonly class FlightsController extends ApiController
 
         $flightJson = $this->serializer->serialize(
             ['flight' => $flight],
-            'json'
         );
 
         $response->getBody()->write($flightJson);

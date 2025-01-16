@@ -20,19 +20,11 @@ use Throwable;
 
 class HttpErrorHandler extends ErrorHandler
 {
-    public const BAD_REQUEST = 'BAD_REQUEST';
-    public const INSUFFICIENT_PRIVILEGES = 'INSUFFICIENT_PRIVILEGES';
-    public const NOT_ALLOWED = 'NOT_ALLOWED';
-    public const NOT_IMPLEMENTED = 'NOT_IMPLEMENTED';
-    public const RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND';
-    public const SERVER_ERROR = 'SERVER_ERROR';
-    public const UNAUTHENTICATED = 'UNAUTHENTICATED';
-    
     protected function respond(): ResponseInterface
     {
         $exception = $this->exception;
         $statusCode = 500;
-        $problem = self::SERVER_ERROR;
+        $problem = ErrorType::INTERNAL_SERVER_ERROR;
         $description = 'An internal error has occurred while processing your request.';
         $title = '500 Internal Server Error';
 

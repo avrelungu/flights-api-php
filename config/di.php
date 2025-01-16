@@ -1,5 +1,6 @@
 <?php
 
+use App\Serializer\Serializer;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
 use Doctrine\ORM\EntityManager;
@@ -12,6 +13,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -87,5 +89,8 @@ $container->add(LoggerInterface::class, function() use ($settings) {
 
     return $logger;
 });
+
+$container->addShared(Serializer::class)
+    ->addArguments([SerializerInterface::class]);
 
 return $container;

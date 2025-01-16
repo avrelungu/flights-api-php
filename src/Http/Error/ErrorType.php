@@ -23,7 +23,8 @@ enum ErrorType: int
             self::UNAUTHORIZED => 'https://datatracker.ietf.org/doc/html/rfc7235#section-3.1',
             self::BAD_REQUEST => 'https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1',
             self::NOT_IMPLEMENTED => 'https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.2',
-            self::UNPROCESSABLE_CONTENT => 'https://datatracker.ietf.org/doc/html/rfc9110#name-422-unprocessable-content'
+            self::UNPROCESSABLE_CONTENT => 'https://datatracker.ietf.org/doc/html/rfc9110#name-422-unprocessable-content',
+            self::INTERNAL_SERVER_ERROR => 'https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1'
         };
     }
 }
